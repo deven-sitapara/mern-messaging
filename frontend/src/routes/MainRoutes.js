@@ -19,6 +19,7 @@ const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authen
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const Chat = Loadable(lazy(() => import('views/chat/chat')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -40,54 +41,63 @@ const MainRoutes = {
             ]
         },
         {
-            path: 'utils',
+            path: 'chat',
             children: [
                 {
-                    path: 'util-typography',
-                    element: <UtilsTypography />
+                    path: 'home',
+                    element: <Chat />
                 }
             ]
         },
-        {
-            path: 'utils',
-            children: [
-                {
-                    path: 'util-color',
-                    element: <UtilsColor />
-                }
-            ]
-        },
-        {
-            path: 'utils',
-            children: [
-                {
-                    path: 'util-shadow',
-                    element: <UtilsShadow />
-                }
-            ]
-        },
-        {
-            path: 'icons',
-            children: [
-                {
-                    path: 'tabler-icons',
-                    element: <UtilsTablerIcons />
-                }
-            ]
-        },
-        {
-            path: 'icons',
-            children: [
-                {
-                    path: 'material-icons',
-                    element: <UtilsMaterialIcons />
-                }
-            ]
-        },
-        {
-            path: 'sample-page',
-            element: <SamplePage />
-        }
+        // {
+        //     path: 'utils',
+        //     children: [
+        //         {
+        //             path: 'util-typography',
+        //             element: <UtilsTypography />
+        //         }
+        //     ]
+        // },
+        // {
+        //     path: 'utils',
+        //     children: [
+        //         {
+        //             path: 'util-color',
+        //             element: <UtilsColor />
+        //         }
+        //     ]
+        // },
+        // {
+        //     path: 'utils',
+        //     children: [
+        //         {
+        //             path: 'util-shadow',
+        //             element: <UtilsShadow />
+        //         }
+        //     ]
+        // },
+        // {
+        //     path: 'icons',
+        //     children: [
+        //         {
+        //             path: 'tabler-icons',
+        //             element: <UtilsTablerIcons />
+        //         }
+        //     ]
+        // },
+        // {
+        //     path: 'icons',
+        //     children: [
+        //         {
+        //             path: 'material-icons',
+        //             element: <UtilsMaterialIcons />
+        //         }
+        //     ]
+        // },
+        // {
+        //     path: 'sample-page',
+        //     element: <SamplePage />
+        // }
     ]
 };
 

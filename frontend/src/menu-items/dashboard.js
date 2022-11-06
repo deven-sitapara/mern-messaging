@@ -18,6 +18,14 @@ const dashboard = {
             url: '/dashboard/default',
             icon: icons.IconDashboard,
             breadcrumbs: false
+        },
+        {
+            id: 'chat',
+            title: 'Chat',
+            type: 'item',
+            url: 'chat/home',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
         }
     ]
 };

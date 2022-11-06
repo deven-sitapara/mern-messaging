@@ -1,3 +1,9 @@
+const io = require('socket.io')(3001, {
+  cors: {
+    origin: ['http://localhost:4000'],
+  },
+});
+
 const express = require('express');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -57,6 +63,38 @@ app.use('/v1', routes);
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
+
+// socket.io
+io.on('connection', (socket) => {
+  console.log(socket.id);
+  socket.on('send-message', (message) => {
+    console.log('send-message', message);
+    socket.broadcast.emit('receive-message', message);
+  });
+});
+
+// io.on('connection', (socket) => {
+//   console.log(`⚡: ${socket.id} user just connected!`)
+//   socket.on("message", data => {
+//     socketIO.emit("messageResponse", data)
+//   })
+
+//   socket.on("typing", data => (
+//     socket.broadcast.emit("typingResponse", data)
+//   ))
+
+//   socket.on("newUser", data => {
+//     users.push(data)
+//     socketIO.emit("newUserResponse", users)
+//   })
+
+//   socket.on('disconnect', () => {
+//     console.log('🔥: A user disconnected');
+//     users = users.filter(user => user.socketID !== socket.id)
+//     socketIO.emit("newUserResponse", users)
+//     socket.disconnect()
+//   });
+// });
 
 // convert error to ApiError, if needed
 app.use(errorConverter);
