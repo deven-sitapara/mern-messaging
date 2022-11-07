@@ -25,18 +25,19 @@ import MainCard from "ui-component/cards/MainCard";
 import SecondaryAction from "ui-component/cards/CardSecondaryAction";
 import { gridSpacing } from "store/constant";
 import { useAuthContext } from "hooks/useAuthContext";
+import { bgcolor, Box } from "@mui/system";
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-  chatSection: {
-    width: "100%",
-    height: "80vh",
-  },
-  headBG: {
-    backgroundColor: "#e0e0e0",
-  },
+  //   table: {
+  //     minWidth: 650,
+  //   },
+  //   chatSection: {
+  //     // width: "100%",
+  //     height: "80vh",
+  //   },
+  //   headBG: {
+  //     backgroundColor: "#e0e0e0",
+  //   },
   borderRight500: {
     borderRight: "1px solid #e0e0e0",
   },
@@ -52,18 +53,23 @@ const useStyles = makeStyles({
 const Chat = () => {
   const classes = useStyles();
   const [messages, setmessages] = useState([]);
+  const [messageText, setmessageText] = useState("");
   //Socket
   const socket = useContext(SocketIOContext);
   const { user } = useAuthContext(SocketIOContext);
 
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [lastPong, setLastPong] = useState(null);
+  const textboxRef = useRef(null);
 
   useEffect(() => {
     //console.log(user);
     socket.on("connect", () => {
       setIsConnected(true);
-      setmessages([...messages, `You connected with id # ${socket.id}`]);
+      setmessages([
+        ...messages,
+        { sender_id: "me", text: `You connected with id # ${socket.id}` },
+      ]);
       console.log(`You connected with id # ${socket.id}`);
     });
 
@@ -76,9 +82,14 @@ const Chat = () => {
     // });
 
     socket.on("receive-message", (msg) => {
-      setmessages([...messages, msg]);
+      setmessages([...messages, msg.text]);
+      console.log("msg");
+      console.log(msg);
+      console.log("sender");
+      console.log("socket.id", msg.sender_id);
       //display message
       // console.log('receive-message', msg);
+      console.log("messages", messages);
       socket.emit("receive-message", msg);
     });
 
@@ -96,120 +107,109 @@ const Chat = () => {
         <SecondaryAction link="https://next.material-ui.com/system/typography/" />
       }
     >
-      <Grid container spacing={gridSpacing}>
-        <Grid item xs={12} sm={6}>
-          <Grid container component={Paper} className={classes.chatSection}>
-            <Grid item xs={4} sx={{pr:1}} className={classes.borderRight500}>
-              <List>
-                <ListItem button key="RemySharp">
-                  <ListItemIcon sx={{pr:1}}>
-                    <Avatar
-                      alt={user.user.email}
-                      src="https://material-ui.com/static/images/avatar/1.jpg"
-                      
-                    />
-                  </ListItemIcon>
-                  <ListItemText primary={user.user.email}></ListItemText>
-                </ListItem>
-              </List>
-              <Divider />
-              <Grid item xs={12} style={{ padding: "10px" }}>
-                <TextField
-                  id="outlined-basic-email"
-                  label="Search"
-                  variant="outlined"
-                  fullWidth
+      <Grid
+        container
+        spacing={gridSpacing}
+        component={Paper}
+        className={classes.chatSection}
+      >
+        <Grid item xs={3} className={classes.borderRight500}>
+          <List>
+            <ListItem button key="RemySharp">
+              <ListItemIcon sx={{ pr: 1 }}>
+                <Avatar
+                  alt={user.user.email}
+                  src="https://material-ui.com/static/images/avatar/1.jpg"
                 />
-              </Grid>
-              <Divider />
-              <List>
-                <ListItem button key="RemySharp">
-                  <ListItemIcon sx={{pr:1}}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="https://material-ui.com/static/images/avatar/1.jpg"
-                    />
-                  </ListItemIcon>
-                  <ListItemText sx={{pr:3}} primary="Remy Sharp">Remy Sharp</ListItemText>
-                  <ListItemText secondary="online" align="right"></ListItemText>
-                </ListItem>
-                <ListItem button key="Alice">
-                  <ListItemIcon sx={{pr:1}}>
-                    <Avatar
-                      alt="Alice"
-                      src="https://material-ui.com/static/images/avatar/3.jpg"
-                    />
-                  </ListItemIcon>
-                  <ListItemText primary="Alice">Alice</ListItemText>
-                </ListItem>
-                <ListItem button key="CindyBaker">
-                  <ListItemIcon sx={{pr:1}}>
-                    <Avatar
-                      alt="Cindy Baker"
-                      src="https://material-ui.com/static/images/avatar/2.jpg"
-                    />
-                  </ListItemIcon>
-                  <ListItemText sx={{pr:3}} primary="Cindy Baker">Cindy Baker</ListItemText>
-                </ListItem>
-              </List>
-            </Grid>
-            <Grid item xs={8}>
-              <List className={classes.messageArea}>
-                {messages.map((message, index) => (
-                  <ListItem key={index}>
-                    <Grid container>
-                      <Grid item xs={12}>
-                        <ListItemText
-                          align="right"
-                          bottom="0"
-                          primary={message}
-                        ></ListItemText>
-                      </Grid>
-                    </Grid>
-                  </ListItem>
-                ))}
-              </List>
-              <Divider />
-              <Grid container style={{ padding: "20px" }}>
-                <Formik
-                  initialValues={{ chatMessage: "" }}
-                  onSubmit={(values, { setSubmitting, resetForm }) => {
-                    const newMessage = values.chatMessage;
-                    socket.emit("send-message", newMessage);
-                    setmessages([...messages, newMessage]);
-                    setSubmitting(false);
-                  }}
+              </ListItemIcon>
+              <ListItemText primary={user.user.email}></ListItemText>
+            </ListItem>
+          </List>
+          <Divider />
+        </Grid>
+        <Grid item xs={9}>
+          <List className={classes.messageArea}>
+            {messages.map((message, index) => (
+              <ListItem key={index}>
+                <Grid container>
+                  <Grid item xs={12}>
+                    {message.sender_id === socket.id ? (
+                      <ListItemText
+                        align="right"
+                        sx={{
+                          padding: "10px",
+                          backgroundColor: "#f8e896",
+                          borderRadius: "10px",
+                        }}
+                        bottom="0"
+                        primary={message.text}
+                      ></ListItemText>
+                    ) : (
+                      <ListItemText
+                        align="left"
+                        sx={{ padding: "10px" }}
+                        bottom="0"
+                        primary={message.text}
+                      ></ListItemText>
+                    )}
+                  </Grid>
+                </Grid>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+          <Grid container style={{ paddingTop: "10px" }}>
+            <Formik
+              initialValues={{ chatMessage: "" }}
+              onSubmit={(values, { setSubmitting, resetForm }) => {
+                const newMessage = values.chatMessage;
+                socket.emit("send-message", {
+                  sender_id: socket.id,
+                  text: newMessage,
+                });
+                setmessages([
+                  ...messages,
+                  { sender_id: socket.id, text: newMessage },
+                ]);
+                setSubmitting(false);
+              }}
+            >
+              {({
+                errors,
+                handleBlur,
+                handleChange,
+                handleSubmit,
+                isSubmitting,
+                touched,
+                values,
+              }) => (
+                <Form
+                  noValidate
+                  onSubmit={handleSubmit}
+                  style={{ display: "inline-flex", width: "100%" }}
                 >
-                  {({
-                    errors,
-                    handleBlur,
-                    handleChange,
-                    handleSubmit,
-                    isSubmitting,
-                    touched,
-                    values,
-                  }) => (
-                    <form   noValidate onSubmit={handleSubmit}>
-                      <Grid item xs={11}>
+                  <Box sx={{ flexGrow: 1 }}>
+                    <Grid container>
+                      <Grid item xs={11} sx={{ paddingRight: "10px" }}>
                         <TextField
+                          ref={textboxRef}
                           onChange={handleChange}
                           id="chatMessage"
                           name="chatMessage"
                           label="Type Something here..."
                           fullWidth
-                          
                         />
                       </Grid>
-                      <Grid item xs={1} align="right">
+                      <Grid item xs={1}>
                         <Fab type="submit" color="primary" aria-label="add">
                           <Send />
                         </Fab>
                       </Grid>
-                    </form>
-                  )}
-                </Formik>
-              </Grid>
-            </Grid>
+                    </Grid>
+                  </Box>
+                </Form>
+              )}
+            </Formik>
           </Grid>
         </Grid>
       </Grid>

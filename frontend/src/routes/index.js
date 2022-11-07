@@ -18,8 +18,8 @@ export default function ThemeRoutes() {
     } else {
         routes.push(AuthenticationRoutes);
     }
-    console.log(current_location);
-    console.log(routes);
+    // console.log(current_location);
+    // console.log(routes);
 
     // if(location.pathname){
     //     const found_routes = routes.filter(route => {

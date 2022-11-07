@@ -67,9 +67,17 @@ app.use((req, res, next) => {
 // socket.io
 io.on('connection', (socket) => {
   console.log(socket.id);
-  socket.on('send-message', (message) => {
-    console.log('send-message', message);
-    socket.broadcast.emit('receive-message', message);
+  socket.on('send-message', (message, room) => {
+    console.log('send-message', message, socket.id);
+    if(room === ''){
+      console.log('broadcase-receive-message', message);
+      //socket.broadcast.emit('receive-message', message, socket.id);
+    }else{
+      console.log('receive-message', message, 'room', room);
+      //socket.broadcast.to(room).emit('receive-message', message, socket.id);
+    }
+    const send = { sender_id : socket.id , text: message };
+    socket.broadcast.emit('receive-message', send );
   });
 });
 
