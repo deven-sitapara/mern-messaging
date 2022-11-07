@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -36,6 +38,7 @@ import { useSignup } from '../../../../hooks/useSignup';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useAuthContext } from 'hooks/useAuthContext';
 
 // ===========================|| FIREBASE - REGISTER ||=========================== //
 
@@ -50,6 +53,9 @@ const FirebaseRegister = ({ ...others }) => {
     const [strength, setStrength] = useState(0);
     const [level, setLevel] = useState();
     const { signup, error, isLoading } = useSignup();
+    const [signupError, setSignupError] = useState(null);
+    const authContext = useAuthContext();
+    const navigate = useNavigate();
 
     const googleHandler = async () => {
         console.error('Register');
@@ -70,8 +76,18 @@ const FirebaseRegister = ({ ...others }) => {
     };
 
     useEffect(() => {
-        changePassword('123456');
-    }, []);
+        console.log('useEffect Called');
+        console.log(authContext);
+        console.log(authContext.user);
+        // scriptedRef.current = true;
+        if (typeof authContext.error !== 'undefined') {
+            setSignupError(authContext?.error?.message);
+        }
+        if (typeof authContext.user !== 'undefined' && authContext.user) {
+            console.log('Redirecting to ');
+            return navigate('/login')
+        }
+    }, [authContext]);
 
     return (
         <>
@@ -139,6 +155,7 @@ const FirebaseRegister = ({ ...others }) => {
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         if (scriptedRef.current) {
+                            console.log("form submited...");
                             await signup(values.email, values.password);
                             setStatus({ success: true });
                             setSubmitting(false);
@@ -283,7 +300,11 @@ const FirebaseRegister = ({ ...others }) => {
                                 <FormHelperText error>{errors.submit}</FormHelperText>
                             </Box>
                         )}
-
+                        {signupError && (
+                            <Box sx={{ mt: 3 }}>
+                                <FormHelperText error>{signupError}</FormHelperText>
+                            </Box>
+                        )}
                         <Box sx={{ mt: 2 }}>
                             <AnimateButton>
                                 <Button

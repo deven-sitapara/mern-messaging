@@ -17,10 +17,13 @@ export const useSignup = () => {
             body: JSON.stringify({ name: 'fake name', email, password })
         });
         const json = await response.json();
-
+        // console.log('json');
+        // console.log(json);
         if (!response.ok) {
             setIsLoading(false);
             setError(json.error);
+            // update the auth context
+            dispatch({ type: 'REGISTER_ERROR', payload: json });
         }
         if (response.ok) {
             // save the user to local storage

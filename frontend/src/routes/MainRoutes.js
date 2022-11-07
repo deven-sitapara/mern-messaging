@@ -5,6 +5,7 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
 import Register3 from 'views/pages/authentication/authentication3/Register3';
+import { Navigate } from 'react-router-dom';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -16,6 +17,7 @@ const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
 const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
 const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
+const AuthRegister3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register3')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -42,12 +44,11 @@ const MainRoutes = {
         },
         {
             path: 'chat',
-            children: [
-                {
-                    path: 'home',
-                    element: <Chat />
-                }
-            ]
+            element: <Chat />
+        },
+        {
+            path: '*',
+            element: <Navigate to="/" />
         },
         // {
         //     path: 'utils',

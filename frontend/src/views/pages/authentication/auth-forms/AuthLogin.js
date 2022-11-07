@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -49,6 +50,7 @@ const FirebaseLogin = ({ ...others }) => {
     const [loginError, setloginError] = useState(null);
     const { login } = useLogin();
     const authContext = useAuthContext();
+    const navigate = useNavigate();
 
     const googleHandler = async () => {
         console.error('Login');
@@ -63,13 +65,18 @@ const FirebaseLogin = ({ ...others }) => {
         event.preventDefault();
     };
     useEffect(() => {
-        console.log('authContext');
+        console.log('useEffect ...');
         console.log(authContext);
         if (typeof authContext.error !== 'undefined') {
             // console.log('authContext?.error');
             // console.log(authContext?.error?.message);
             setloginError(authContext?.error?.message);
         }
+        if (typeof authContext.user !== 'undefined' && authContext.user) {
+            console.log('Redirecting to chat');
+            return navigate('/chat')
+        }
+
     }, [authContext]);
 
     return (

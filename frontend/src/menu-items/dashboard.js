@@ -23,7 +23,7 @@ const dashboard = {
             id: 'chat',
             title: 'Chat',
             type: 'item',
-            url: 'chat/home',
+            url: '/chat',
             icon: icons.IconDashboard,
             breadcrumbs: false
         }
