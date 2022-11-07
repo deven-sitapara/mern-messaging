@@ -26,6 +26,7 @@ import SecondaryAction from "ui-component/cards/CardSecondaryAction";
 import { gridSpacing } from "store/constant";
 import { useAuthContext } from "hooks/useAuthContext";
 import { bgcolor, Box } from "@mui/system";
+import ChatFooter from "./chatFooter";
 
 const useStyles = makeStyles({
   //   table: {
@@ -159,9 +160,8 @@ const Chat = () => {
           </List>
           <Divider />
           <Grid container style={{ paddingTop: "10px" }}>
-            <Formik
-              initialValues={{ chatMessage: "" }}
-              onSubmit={(values, { setSubmitting, resetForm }) => {
+
+          <ChatFooter socket={socket} handleSubmit={(values, { setSubmitting, resetForm }) => {
                 const newMessage = values.chatMessage;
                 socket.emit("send-message", {
                   sender_id: socket.id,
@@ -172,44 +172,7 @@ const Chat = () => {
                   { sender_id: socket.id, text: newMessage },
                 ]);
                 setSubmitting(false);
-              }}
-            >
-              {({
-                errors,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-                isSubmitting,
-                touched,
-                values,
-              }) => (
-                <Form
-                  noValidate
-                  onSubmit={handleSubmit}
-                  style={{ display: "inline-flex", width: "100%" }}
-                >
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Grid container>
-                      <Grid item xs={11} sx={{ paddingRight: "10px" }}>
-                        <TextField
-                          ref={textboxRef}
-                          onChange={handleChange}
-                          id="chatMessage"
-                          name="chatMessage"
-                          label="Type Something here..."
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item xs={1}>
-                        <Fab type="submit" color="primary" aria-label="add">
-                          <Send />
-                        </Fab>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </Form>
-              )}
-            </Formik>
+              }} />
           </Grid>
         </Grid>
       </Grid>
