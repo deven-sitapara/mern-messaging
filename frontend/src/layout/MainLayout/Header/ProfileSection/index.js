@@ -39,6 +39,7 @@ import User1 from 'assets/images/users/user-round.svg';
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 import { useLogout } from 'hooks/useLogout';
+import { useAuthContext } from 'hooks/useAuthContext';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -53,6 +54,7 @@ const ProfileSection = () => {
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [open, setOpen] = useState(false);
     const { logout } = useLogout();
+    const userContext = useAuthContext();
 
     /**
      * anchorRef is used on different componets and specifying one type leads to other components throwing an error
@@ -163,7 +165,7 @@ const ProfileSection = () => {
                                             <Stack direction="row" spacing={0.5} alignItems="center">
                                                 <Typography variant="h4">Good Morning,</Typography>
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                                    Johne Doe
+                                                {userContext?.user.user.email}
                                                 </Typography>
                                             </Stack>
                                             <Typography variant="subtitle2">Project Admin</Typography>

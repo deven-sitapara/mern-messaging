@@ -13,6 +13,8 @@ import { store } from 'store';
 import 'assets/scss/style.scss';
 import config from './config';
 import { AuthContextProvider } from 'context/AuthContext';
+import { ApolloProvider } from '@apollo/client';
+import client from 'context/ApolloClient';
 
 // ==============================|| REACT DOM RENDER  ||============================== //
 
@@ -21,9 +23,11 @@ const root = createRoot(container); // createRoot(container!) if you use TypeScr
 root.render(
     <Provider store={store}>
         <BrowserRouter basename={config.basename}>
-            <AuthContextProvider>
-                <App />
-            </AuthContextProvider>
+            <ApolloProvider client={client}>
+                <AuthContextProvider>
+                    <App />
+                </AuthContextProvider>
+            </ApolloProvider>
         </BrowserRouter>
     </Provider>
 );

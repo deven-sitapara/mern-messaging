@@ -67,10 +67,10 @@ const FirebaseLogin = ({ ...others }) => {
     useEffect(() => {
         console.log('useEffect ...');
         console.log(authContext);
-        if (typeof authContext.error !== 'undefined') {
+        if (typeof authContext.errors !== 'undefined') {
             // console.log('authContext?.error');
             // console.log(authContext?.error?.message);
-            setloginError(authContext?.error?.message);
+            setloginError(authContext.errors[0].message);
         }
         if (typeof authContext.user !== 'undefined' && authContext.user) {
             console.log('Redirecting to chat');
@@ -269,5 +269,7 @@ const FirebaseLogin = ({ ...others }) => {
         </>
     );
 };
+
+
 
 export default FirebaseLogin;
