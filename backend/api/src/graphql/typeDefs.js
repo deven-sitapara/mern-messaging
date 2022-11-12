@@ -23,7 +23,7 @@ module.exports = gql`
     refresh: TokenRefresh
   }
 
-  type RegisterResponse {
+  type LoginResponse {
     user: User
     tokens: Tokens !
   }
@@ -39,11 +39,16 @@ module.exports = gql`
     password: String!
     email: String!
   }
+  input LoginInput {
+    email: String!
+    password: String!
+  }
+
   type Query {
     getPosts: [Post]
   }
   type Mutation {
-    register(registerInput: RegisterInput): RegisterResponse!
-    login(username: String!, password: String!): User!
+    register(registerInput: RegisterInput): LoginResponse!
+    login(loginInput: LoginInput): LoginResponse!
   }
 `;
