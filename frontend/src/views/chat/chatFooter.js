@@ -3,18 +3,18 @@ import { Fab, Grid, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { Form, Formik } from "formik";
 import React from "react";
+import { useState } from "react";
 import { useRef } from "react";
 
 // ==============================|| CHAT Footer PAGE ||============================== //
 
 const ChatFooter = ({socket,handleSubmit}) => {
-  const textboxRef = useRef(null);
   return (
           <Grid container style={{ paddingTop: "10px" }}>
             <Formik
-              initialValues={{ chatMessage: "" }}
+              initialValues={{ chatMessage: '' }}
               onSubmit={handleSubmit}
-            >
+             >
               {({
                 errors,
                 handleBlur,
@@ -23,6 +23,7 @@ const ChatFooter = ({socket,handleSubmit}) => {
                 isSubmitting,
                 touched,
                 values,
+                initialValues
               }) => (
                 <Form
                   noValidate
@@ -33,12 +34,12 @@ const ChatFooter = ({socket,handleSubmit}) => {
                     <Grid container>
                       <Grid item xs={11} sx={{ paddingRight: "10px" }}>
                         <TextField
-                          ref={textboxRef}
                           onChange={handleChange}
                           id="chatMessage"
                           name="chatMessage"
                           label="Type Something here..."
                           fullWidth
+                          value={values.chatMessage}
                         />
                       </Grid>
                       <Grid item xs={1}>
@@ -52,7 +53,6 @@ const ChatFooter = ({socket,handleSubmit}) => {
               )}
             </Formik>
           </Grid>
-        
   );
 };
 

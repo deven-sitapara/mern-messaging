@@ -61,7 +61,7 @@ const Chat = () => {
 
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [lastPong, setLastPong] = useState(null);
-  const textboxRef = useRef(null);
+  
 
   useEffect(() => {
     //console.log(user);
@@ -161,7 +161,7 @@ const Chat = () => {
           <Divider />
           <Grid container style={{ paddingTop: "10px" }}>
 
-          <ChatFooter socket={socket} handleSubmit={(values, { setSubmitting, resetForm }) => {
+          <ChatFooter socket={socket} handleSubmit={(values, { setSubmitting }) => {
                 const newMessage = values.chatMessage;
                 socket.emit("send-message", {
                   sender_id: socket.id,
@@ -172,7 +172,8 @@ const Chat = () => {
                   { sender_id: socket.id, text: newMessage },
                 ]);
                 setSubmitting(false);
-              }} />
+                values.chatMessage = '';
+               }} />
           </Grid>
         </Grid>
       </Grid>
