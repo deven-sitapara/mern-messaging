@@ -14,16 +14,20 @@ const apollo = new ApolloServer({
 //graphql --
 
 let server;
-let rest_server;
+
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
+
   logger.info('Connected to MongoDB');
 
-  server = apollo.listen(config.port, () => {
-    logger.info(`Listening to port ${config.port}`);
-  });
-  // server = app.listen(config.port, () => {
-  //   logger.info(`Listening to port ${config.port}`);
-  // });
+  if (process.env.api_type === 'graphql') {
+    server = apollo.listen(config.port, () => {
+      logger.info(`Listening to port ${config.port}`);
+    });
+  } else {
+    server = app.listen(config.port, () => {
+      logger.info(`Listening to port ${config.port}`);
+    });
+  }
 });
 
 const exitHandler = () => {
