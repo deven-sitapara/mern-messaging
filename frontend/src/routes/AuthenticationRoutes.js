@@ -29,7 +29,7 @@ const AuthenticationRoutes = {
         },
         {
             path: '*',
-            element: <Navigate to="/" />
+            element: <Navigate to="/login" />
         },
     ]
 };

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 // material-ui
@@ -63,6 +63,7 @@ const ProfileSection = () => {
     const handleLogout = async () => {
         console.log('Logout');
         logout();
+        return <Navigate to="/login" />;
     };
 
     const handleClose = (event) => {
