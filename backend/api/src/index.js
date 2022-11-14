@@ -9,7 +9,13 @@ const resolvers = require('./graphql/resolvers');
 const { ApolloServer } = require('apollo-server');
 const apollo = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  cache: "bounded",
+  persistedQueries: {
+    ttl: 900, // 15 minutes
+  },
+
+
 });
 //graphql --
 
