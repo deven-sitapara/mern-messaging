@@ -1,4 +1,4 @@
-# qd-corp-task-mern-messaging
+# mern-messaging
 
 ## Reference used
 
