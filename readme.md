@@ -1,4 +1,4 @@
-# mern-messaging
+# Chat Application
 
 ## Reference used
 
